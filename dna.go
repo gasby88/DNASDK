@@ -201,14 +201,14 @@ func (this *DnaClient) NewRecordTransaction(recordType string, recordData []byte
 	return tx, nil
 }
 
-//func (this *DnaClient) NewStateUpdateTransction(account *account.Account, namespace, key, value []byte) (*transaction.Transaction, error) {
-//	tx, err := transaction.NewStateUpdateTransaction(account.PubKey(), namespace, key, value)
-//	if err != nil {
-//		return nil, fmt.Errorf("NewStateUpdateTransaction error:%s", err)
-//	}
-//	this.setNonce(tx)
-//	return tx, nil
-//}
+func (this *DnaClient) NewStateUpdateTransction(account *account.Account, namespace, key, value []byte) (*transaction.Transaction, error) {
+	tx, err := transaction.NewStateUpdateTransaction(account.PubKey(), namespace, key, value)
+	if err != nil {
+		return nil, fmt.Errorf("NewStateUpdateTransaction error:%s", err)
+	}
+	this.setNonce(tx)
+	return tx, nil
+}
 //
 //func (this *DnaClient) NewStateUpdaterTransaction(account *account.Account, isAdd bool, namespace []byte) (*transaction.Transaction, error) {
 //	tx, err := transaction.NewStateUpdaterTransaction(account.PubKey(), isAdd, namespace, []byte(""))
@@ -390,18 +390,18 @@ func (this *DnaClient) GetTransactionProgramHashes(tx *transaction.Transaction) 
 	case transaction.Record:
 	case transaction.BookKeeper:
 	//case transaction.StateUpdater:
-	//case transaction.StateUpdate:
-	//	updater := tx.Payload.(*payload.StateUpdate).Updater
-	//	signatureRedeemScript, err := contract.CreateSignatureRedeemScript(updater)
-	//	if err != nil {
-	//		return nil, fmt.Errorf("CreateSignatureRedeemScript error:%s.", err)
-	//	}
-	//
-	//	astHash, err := ToCodeHash(signatureRedeemScript)
-	//	if err != nil {
-	//		return nil, fmt.Errorf("ToCodeHash error:%s.", err)
-	//	}
-	//	hashs = append(hashs, astHash)
+	case transaction.StateUpdate:
+		updater := tx.Payload.(*payload.StateUpdate).Updater
+		signatureRedeemScript, err := contract.CreateSignatureRedeemScript(updater)
+		if err != nil {
+			return nil, fmt.Errorf("CreateSignatureRedeemScript error:%s.", err)
+		}
+
+		astHash, err := ToCodeHash(signatureRedeemScript)
+		if err != nil {
+			return nil, fmt.Errorf("ToCodeHash error:%s.", err)
+		}
+		hashs = append(hashs, astHash)
 	default:
 	}
 	//remove dupilicated hashes
