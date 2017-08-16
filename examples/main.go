@@ -71,4 +71,13 @@ func main() {
 		return
 	}
 	fmt.Printf("TransferTransaction success From:%x To:%x Amount:%v\n", issuer1.ProgramHash, issuer2.ProgramHash, client.GetRawAssetAmount(assetTsfAmount))
+
+	did := []byte("123455")
+	ddo := []byte("Hello world!")
+	err = IdentityUpdateTransaction(client, issuer1, did, ddo)
+	if err != nil {
+		fmt.Printf("IdentityUpdateTransaction error:%s\n", err)
+		return
+	}
+	fmt.Printf("IdentityUpdateTransaction success DID:%s DDO:%s\n", did, ddo)
 }
