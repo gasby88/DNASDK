@@ -15,6 +15,7 @@ const (
 	DNA_RPC_GETBLOCKHASH        = "getblockhash"
 	DNA_RPC_GETUNSPENDOUTPUT    = "getunspendoutput"
 	DNA_RPC_GETCURRENTBLOCKHASH = "getbestblockhash"
+	DNA_RPC_GETIDENTITYUPDATE   = "getidentityupdate"
 )
 
 const (

@@ -49,7 +49,7 @@ func main() {
 	asset := client.CreateAsset(assetName, assetPrecise, assetType, recordType)
 
 	assetRegAmount := client.MakeAssetAmount(20000)
-	assetId, err := RegisterTransaction(client, asset, assetRegAmount, issuer1,controller)
+	assetId, err := RegisterTransaction(client, asset, assetRegAmount, issuer1, controller)
 	if err != nil {
 		fmt.Printf("RegisterTransaction error:%s\n", err)
 		return
@@ -72,11 +72,23 @@ func main() {
 	}
 	fmt.Printf("TransferTransaction success From:%x To:%x Amount:%v\n", issuer1.ProgramHash, issuer2.ProgramHash, client.GetRawAssetAmount(assetTsfAmount))
 
-	did := []byte("123455")
-	ddo := []byte("Hello world!")
-	err = IdentityUpdateTransaction(client, issuer1, did, ddo)
+	method := []byte("poc")
+	id := []byte("123456")
+	did := []byte(fmt.Sprintf("did:%s:%s", method, id))
+	ddo := []byte("Hello world")
+	err = SetIdentityUpdate(client, issuer1, did, ddo)
 	if err != nil {
-		fmt.Printf("IdentityUpdateTransaction error:%s\n", err)
+		fmt.Printf("SetIdentityUpdate error:%s\n", err)
+		return
+	}
+
+	ddo2, err := GetIdentityUpdate(client, method, id)
+	if err != nil {
+		fmt.Printf("GetIdentityUpdate error:%s", err)
+		return
+	}
+	if string(ddo) != string(ddo2) {
+		fmt.Printf("DDO:%s not equals %s", ddo2, ddo)
 		return
 	}
 	fmt.Printf("IdentityUpdateTransaction success DID:%s DDO:%s\n", did, ddo)

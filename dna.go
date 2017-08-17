@@ -158,6 +158,14 @@ func (this *DnaClient) GetBlockCount() (uint32, error) {
 	return count, nil
 }
 
+func (this *DnaClient) GetIdentityUpdate(method, id string)([]byte, error){
+	data, err := this.sendRpcRequest(DNA_RPC_GETIDENTITYUPDATE, []interface{}{method, id})
+	if err != nil {
+		return nil, fmt.Errorf("sendRpcRequest error:%s", err)
+	}
+	return data, nil
+}
+
 func (this *DnaClient) NewAssetRegisterTransaction(asset *asset.Asset,
 	amount Fixed64,
 	issuer,
